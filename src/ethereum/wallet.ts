@@ -57,7 +57,7 @@ const getStoredEncryptedKey = (): string | null => {
 };
 
 
-const signTransaction = async (tx: any): Promise<string> => {
+const signTransaction = async (tx: any): Promise<any> => {
   const encryptedKey = getStoredEncryptedKey();
   if (!encryptedKey) {
     throw new Error('No wallet connected');
