@@ -33,11 +33,11 @@ export function GridBackgroundDemo() {
           <p className="text-xl p-30 text-white mt-2">Solana</p>
         </div>
       </div>
-      <div className="text-5xl pb-30 font-bold relative z-20 bg-clip-text text-transparent bg-gradient-to-b from-neutral-200 to-neutral-500 py-2">
+      <div className="pb-20 text-5xl pb-30 font-bold relative z-20 bg-clip-text text-transparent bg-gradient-to-b from-neutral-200 to-neutral-500 py-2">
         All in one wallet
       </div>
-      <div className="bg-stone-700 rounded-xl w-full">
-        <h1 className="text-lg font-extrabold text-center bg-clip-text text-transparent bg-gradient-to-b from-neutral-50 to-neutral-950 py-2">
+      <div className="bg-stone-500 rounded-xl w-full">
+        <h1 className="text-lg font-extrabold text-center bg-clip-text text-transparent bg-gradient-to-b from-neutral-200 to-neutral-400 py-2">
           go-to solution for all your DeFi needs
         </h1>
       </div>

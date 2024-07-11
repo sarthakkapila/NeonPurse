@@ -14,6 +14,20 @@ export function SpotlightPreview() {
         <h1 className="text-4xl md:text-7xl font-bold text-center bg-clip-text text-transparent bg-gradient-to-b from-neutral-50 to-neutral-400 bg-opacity-50">
           Neon Purse is all you need.
         </h1>
+        <div className="flex justify-center space-x-20 p-14">
+          <button className="relative p-[3px] flex justify-end">
+            <div className="absolute inset-0 bg-gradient-to-r from-neutral-600 to-neutral-800 rounded-lg" />
+            <div className="relative px-8 py-4 p-20 text-gray-300 font-extrabold text-xl bg-transparent hover:bg-transparent transition duration-200">
+              Create Wallet
+            </div>
+          </button>
+          <button className="relative p-[3px] flex justify-end">
+            <div className="absolute inset-0 bg-gradient-to-r from-neutral-600 to-neutral-800 rounded-lg" />
+            <div className="relative px-8 py-4 p-20 text-gray-300 font-extrabold text-xl bg-transparent hover:bg-transparent transition duration-200">
+              Import Wallet
+            </div>
+          </button>
+        </div>
       </div>
     </div>
   );
