@@ -2,6 +2,7 @@ import Web3 from "web3";
 import * as bip39 from 'bip39';
 import { hdkey } from 'ethereumjs-wallet';
 import CryptoJS from 'crypto-js';
+import bcrypt from 'bcrypt';
 
 const web3 = new Web3("wss://ethereum-sepolia-rpc.publicnode.com");
 const ENCRYPTED_KEY_STORAGE = 'ENCRYPTED_WALLET_KEY';
@@ -69,7 +70,19 @@ const signTransaction = async (tx: any): Promise<any> => {
 };
 
 // Implement this securely, possibly involving user input or a secure key storage mechanism
-const getSecretPassphrase = (): string => {
-  return 'some-secret-passphrase';
+const getSecretPassphrase = async (password: string): Promise<string> => {
+  const hash = await hashPassword(password);
+  const verify = await verifyWalletPassword(password, hash);
+  return verify ? hash : Promise.reject(new Error('Invalid password'));
 };
 
+const hashPassword = async (password: string): Promise<string> => {
+  const saltRounds = 10;
+  const salt = await bcrypt.genSalt(saltRounds);
+  return bcrypt.hashSync(password, salt);
+};
+
+const verifyWalletPassword = async (password: string, hashedPassword: string): Promise<boolean> => {
+  const isMatch = await bcrypt.compare(password, hashedPassword);
+  return isMatch;
+};
