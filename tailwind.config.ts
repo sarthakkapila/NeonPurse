@@ -62,8 +62,8 @@ const config: Config = {
         'sm': '0.125rem',
         DEFAULT: '4px',
         'md': '0.375rem',
-        'lg': '1.0rem',
-        'full': '9999px',
+        'lg': '5.0rem',
+        'full': '10.0rem',
         'large': '12px',
       },
       keyframes: {
