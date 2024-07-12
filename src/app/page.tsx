@@ -5,7 +5,7 @@ import { SpotlightPreview } from '@/components/gridspot';
 import { GridBackground } from '@/components/grid';
 import { BackgroundBeams } from '@/components/BackgroundSign';
 import SparklesCore from '@/components/ui/SparklesCore';
-
+import { SiteFooter } from '@/components/Footer';
 export default function Home() {
   return (
     <div className="relative min-h-screen bg-zinc-950 bg-grid p-4">
@@ -58,6 +58,7 @@ export default function Home() {
           <BackgroundBeams />
         </div>
       </div>
+      <SiteFooter />
     </div>
   );
 }
