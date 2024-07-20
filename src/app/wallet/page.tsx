@@ -1,14 +1,16 @@
-"use client"
-import { useState, useCallback, useEffect } from 'react';
-import { NextPage } from 'next';
-import { ChakraProvider, Box, Flex, Grid, GridItem, Image, useToast } from "@chakra-ui/react";
+"use client";
+import { useState, useCallback, useEffect } from "react";
+import { NextPage } from "next";
+import { ChakraProvider, Box, Flex, Grid, GridItem, Image, useToast, Button, Text } from "@chakra-ui/react";
 import AuthClient, { generateNonce } from "@walletconnect/auth-client";
 import { Web3Modal } from "@web3modal/standalone";
 import { version } from "@walletconnect/auth-client/package.json";
+import SparklesCore from "@/components/ui/SparklesCore";
 
 // Ensure you have these components defined
 import DefaultView from "@/views/DefaultView";
 import SignedInView from "@/views/SignedInView";
+import { SiteFooter } from "@/components/Footer";
 
 const projectId = process.env.NEXT_PUBLIC_PROJECT_ID;
 if (!projectId) {
@@ -51,10 +53,10 @@ const Home: NextPage = () => {
       relayUrl: process.env.NEXT_PUBLIC_RELAY_URL || "wss://relay.walletconnect.com",
       projectId: process.env.NEXT_PUBLIC_PROJECT_ID!,
       metadata: {
-        name: "",
-        description: "",
+        name: "Neon Purse",
+        description: "Sign in with your wallet",
         url: window.location.host,
-        icons: [],
+        icons: ["/neon-purse-logo.png"], // Update the logo here
       },
     })
       .then((authClient) => {
@@ -110,41 +112,55 @@ const Home: NextPage = () => {
   }, [address]);
 
   return (
-    <ChakraProvider>
-      <Box width="100vw" height="100vh" className="bg-primary">
-        <Grid
-          templateAreas={`"header" "main" "footer"`}
-          style={{ height: "100%", width: "100%" }}
-          gridTemplateRows={"50px 3fr 20px"}
-          gridTemplateColumns={"1fr"}
-          paddingY="2em"
-        >
-          <GridItem area={"header"}>
-            <Flex alignItems="center" justifyContent="center" gap="5" fontSize={"1.25em"}>
-              <div>Neon Purse</div>
-              <Flex padding="0.5em" borderRadius="16px" className="bg-secondary" gap="2">
-                <Image width="1.5em" height="1.5em" src="/wc-bg.png" alt="WC" />
-                <span>V{version}</span>
+    <div>
+      <SparklesCore
+        className="absolute inset-0 w-full h-full"
+        background="transparent"
+        minSize={1}
+        maxSize={3}
+        speed={2}
+        particleColor="#ffff"
+        particleDensity={150}
+      />
+      <ChakraProvider>
+        <Box width="100vw" height="100vh" bgGradient="linear(to-r, #1a1a1a, #333333)">
+          <Grid
+            templateAreas={`"header" "main" "footer"`}
+            style={{ height: "100%", width: "100%" }}
+            gridTemplateRows={"70px 3fr 30px"}
+            gridTemplateColumns={"1fr"}
+            paddingY="2em"
+          >
+            <GridItem area={"header"}>
+              <Flex alignItems="center" justifyContent="center" gap="5" fontSize={"1.5em"} color="white">
+                <div className="text-4xl sm:text-4xl font-extrabold bg-clip-text text-transparent bg-gradient-to-b from-neutral-200 to-neutral-950 py-4">
+                  NeonPurse
+                </div>
+                <Flex padding="0.5em" borderRadius="16px" bg="blackAlpha.600" gap="2">
+                  <Image width="1.5em" height="1.5em" src="/wc-bg.png" alt="WC" />
+                  <span>v{version}</span>
+                </Flex>
               </Flex>
-            </Flex>
-          </GridItem>
-          <Flex justifyContent="center">
-            <GridItem area={"main"} justifyContent="center">
-              <Box width="100%" height="100%">
-                {view === "default" && (
-                  <DefaultView onClick={onSignIn} hasInitialized={hasInitialized} />
-                )}
-                {view === "signedIn" && <SignedInView address={address} />}
-              </Box>
             </GridItem>
-          </Flex>
-          <GridItem area={"footer"} alignSelf="flex-end">
-            <Flex justifyContent="flex-end">
-                          </Flex>
-          </GridItem>
-        </Grid>
-      </Box>
-    </ChakraProvider>
+            <Flex justifyContent="center">
+              <GridItem area={"main"} justifyContent="center">
+                <Box width="100%" height="100%">
+                  {view === "default" && (
+                    <DefaultView onClick={onSignIn} hasInitialized={hasInitialized} />
+                  )}
+                  {view === "signedIn" && <SignedInView address={address} />}
+                </Box>
+              </GridItem>
+            </Flex>
+            <GridItem area={"footer"} alignSelf="flex-end">
+              <Flex justifyContent="center" color="white">
+                <Text fontSize="md">© 2024 Neon Purse</Text>
+              </Flex>
+            </GridItem>
+          </Grid>
+        </Box>
+      </ChakraProvider>
+    </div>
   );
 };
 
