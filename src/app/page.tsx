@@ -30,7 +30,7 @@ export default function Home() {
       <div className="relative z-10">
         <Head>
           <title>NeonPurse</title>
-          <link rel="icon" href="/favicon.ico" />
+          <link rel="icon" href="/auth.png" />
         </Head>
 
         {/* Header */}
