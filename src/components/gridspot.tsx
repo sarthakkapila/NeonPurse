@@ -4,6 +4,8 @@ import React from "react";
 import { Spotlight } from "@/components/ui/Spotlight";
 import TypingAnimation from "@/components/TypingAnimation";
 import { motion } from "framer-motion";
+import { useRouter } from 'next/navigation';
+
 const textVariants = {
   initial: {
     x: -500,
@@ -27,6 +29,11 @@ const textVariants = {
   },
 };
 export function SpotlightPreview() {
+  const router = useRouter();
+
+  const handleNavigation = (path: string) => {
+    router.push(path);
+  };
   return (
     <div className="h-[60rem] w-full rounded-lg flex md:items-center md:justify-center bg-black/[0.96] antialiased bg-grid-white/[0.02] relative overflow-hidden">
       <Spotlight
@@ -47,13 +54,17 @@ export function SpotlightPreview() {
           Swap, stake, and earn with a splash of neon!
         </p>
         <div className="flex justify-start space-x-8 pt-5">
-          <button className="relative p-[3px] flex justify-end">
+          <button className="relative p-[3px] flex justify-end"
+            onClick={() => handleNavigation('/wallet')}
+          >
             <div className="absolute inset-0 bg-gradient-to-r from-neutral-600 to-neutral-800 rounded-lg" />
             <div className="relative px-8 py-4 text-gray-300 font-extrabold text-xl bg-transparent hover:bg-transparent transition duration-200">
               Create Wallet
             </div>
           </button>
-          <button className="relative p-[3px] flex justify-end">
+          <button className="relative p-[3px] flex justify-end"
+            onClick={() => handleNavigation('/wallet')}
+            >
             <div className="absolute inset-0 bg-gradient-to-r from-neutral-600 to-neutral-800 rounded-lg" />
             <div className="relative px-8 py-4 text-gray-300 font-extrabold text-xl bg-transparent hover:bg-transparent transition duration-200">
               Import Wallet
