@@ -1,3 +1,4 @@
+/* eslint-disable */
 import AuthClient from '@walletconnect/auth-client'
 import pkg from '@walletconnect/auth-client/package.json'
 import { Verify } from '@walletconnect/types'
@@ -29,16 +30,6 @@ export async function createAuthClient() {
   console.log({ authClientId })
 }
 
-export async function createPushClient() {
-  pushClient = await WalletClient.init({
-    logger: 'debug',
-    core,
-    projectId: process.env.NEXT_PUBLIC_PROJECT_ID!,
-    relayUrl: process.env.NEXT_PUBLIC_RELAY_URL || 'wss://relay.walletconnect.com'
-  })
-  const pushClientId = await pushClient.core.crypto.getClientId()
-  console.log({ pushClientId })
-}
 
 export const getAndFormatNotifications = () => {
   if (!pushClient) {
