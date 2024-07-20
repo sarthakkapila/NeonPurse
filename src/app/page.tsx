@@ -1,12 +1,20 @@
-
+"use client"
 import Head from 'next/head';
-import { NavbarDemo } from '@/components/navbar';
+import { AppNavbar } from '@/components/navbar';
 import { SpotlightPreview } from '@/components/gridspot';
 import { GridBackground } from '@/components/grid';
 import { BackgroundBeams } from '@/components/BackgroundSign';
 import SparklesCore from '@/components/ui/SparklesCore';
 import { SiteFooter } from '@/components/Footer';
+import { useRouter } from 'next/navigation';
+
 export default function Home() {
+  const router = useRouter();
+
+  const handleNavigation = (path: string) => {
+    router.push(path);
+  };
+
   return (
     <div className="relative min-h-screen bg-zinc-950 bg-grid p-4">
       <SparklesCore
@@ -31,10 +39,13 @@ export default function Home() {
             NeonPurse
           </div>
           <div className="p-10">
-            <NavbarDemo />
+            <AppNavbar />
           </div>
           <div>
-            <button className="relative p-[3px] flex justify-end">
+            <button
+              className="relative p-[3px] flex justify-end"
+              onClick={() => handleNavigation('/wallet')}
+            >
               <div className="absolute inset-0 bg-gradient-to-r from-neutral-700 to-neutral-800 rounded-lg" />
               <div className="relative px-8 py-4 text-neutral-400 font-extrabold text-xl bg-transparent hover:bg-transparent transition duration-200">
                 Launch App
@@ -54,12 +65,12 @@ export default function Home() {
 
           <GridBackground />
         </div>
+
         <div>
           <BackgroundBeams />
+          <SiteFooter />
         </div>
       </div>
-      <SiteFooter />
     </div>
   );
 }
-
