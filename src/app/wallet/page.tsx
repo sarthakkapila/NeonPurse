@@ -1,135 +1,151 @@
 "use client"
-import { useState } from 'react';
-import Head from 'next/head';
-import { FiSend, FiDownload, FiPlus, FiSettings, FiCopy, FiExternalLink, FiEye, FiEyeOff } from 'react-icons/fi';
+import { useState, useCallback, useEffect } from 'react';
+import { NextPage } from 'next';
+import { ChakraProvider, Box, Flex, Grid, GridItem, Image, useToast } from "@chakra-ui/react";
+import AuthClient, { generateNonce } from "@walletconnect/auth-client";
+import { Web3Modal } from "@web3modal/standalone";
+import { version } from "@walletconnect/auth-client/package.json";
 
-export default function Home() {
-  const [activeTab, setActiveTab] = useState('tokens');
-  const [showBalance, setShowBalance] = useState(true);
-  const [assets, setAssets] = useState([
-    { name: 'Solana', symbol: 'SOL', amount: 12.5, value: 1250, change: 2.5 },
-    { name: 'USD Coin', symbol: 'USDC', amount: 500, value: 500, change: 0 },
-    { name: 'Serum', symbol: 'SRM', amount: 100, value: 80, change: -1.2 },
-  ]);
-  const [nfts, setNfts] = useState([
-    { name: 'Degen Ape #1234', collection: 'Degen Ape Academy' },
-    { name: 'Solana Monkey #5678', collection: 'SMB' },
-  ]);
+// Ensure you have these components defined
+import DefaultView from "@/views/DefaultView";
+import SignedInView from "@/views/SignedInView";
 
-  const totalBalance = assets.reduce((sum, asset) => sum + asset.value, 0);
-  const truncatedAddress = 'BgT...h7Y2';
-
-  return (
-    <div className="min-h-screen bg-black text-white flex">
-      <Head>
-        <title>NeonPurse-Wallet</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-      {/* Sidebar */}
-      <aside className="w-64 bg-neutral-950 p-4">
-        <h1 className="text-2xl font-bold mb-8">NeonPurse</h1>
-        <nav className="space-y-2">
-          <button className={`w-full text-left p-2 rounded ${activeTab === 'tokens' ? 'bg-neutral-800' : 'hover:bg-neutral-800'}`} onClick={() => setActiveTab('tokens')}>Tokens</button>
-          <button className={`w-full text-left p-2 rounded ${activeTab === 'nfts' ? 'bg-neutral-800' : 'hover:bg-neutral-800'}`} onClick={() => setActiveTab('nfts')}>NFTs</button>
-          <button className={`w-full text-left p-2 rounded ${activeTab === 'activity' ? 'bg-neutral-800' : 'hover:bg-neutral-800'}`} onClick={() => setActiveTab('activity')}>Activity</button>
-        </nav>
-        <div className="mt-auto pt-4">
-          <button className="w-full text-left p-2 rounded hover:bg-neutral-600 flex items-center">
-            <FiSettings className="mr-2" /> Settings
-          </button>
-        </div>
-      </aside>
-
-      {/* Main Content */}
-      <main className="flex-1 p-8">
-        {/* Header */}
-        <header className="flex justify-between items-center mb-8">
-          <div>
-            <h2 className="text-xl font-bold">{truncatedAddress}</h2>
-            <div className="flex items-center text-sm text-neutral-700">
-              <button className="mr-2 hover:text-white"><FiCopy /></button>
-              <button className="hover:text-white"><FiExternalLink /></button>
-            </div>
-          </div>
-          <div className="flex items-center space-x-4">
-            <button className="bg-neutral-700 hover:bg-neutral-950 px-4 py-2 rounded-full flex items-center">
-              <FiPlus className="mr-2" /> Add Funds
-            </button>
-            <button className="bg-neutral-800 hover:bg-neutral-950 p-2 rounded-full">
-              <FiSend />
-            </button>
-          </div>
-        </header>
-
-        {/* Balance */}
-        <div className="bg-neutral-950 rounded-lg p-6 mb-8">
-          <div className="flex justify-between items-center mb-2">
-            <h3 className="text-lg">Total Balance</h3>
-            <button onClick={() => setShowBalance(!showBalance)}>
-              {showBalance ? <FiEyeOff /> : <FiEye />}
-            </button>
-          </div>
-          <p className="text-4xl font-bold">
-            {showBalance ? `$${totalBalance.toFixed(2)}` : '••••••'}
-          </p>
-        </div>
-
-        {/* Tokens */}
-        {activeTab === 'tokens' && (
-          <div>
-            <h3 className="text-xl font-bold mb-4">Tokens</h3>
-            <div className="space-y-4">
-              {assets.map((asset) => (
-                <div key={asset.symbol} className="flex justify-between items-center bg-neutral-950 p-4 rounded-lg">
-                  <div className="flex items-center">
-                    <div className="w-10 h-10 rounded-full bg-neutral-800 mr-4 flex items-center justify-center font-bold">
-                      {asset.symbol.slice(0, 2)}
-                    </div>
-                    <div>
-                      <p className="font-bold">{asset.name}</p>
-                      <p className="text-sm text-neutral-700">{asset.amount} {asset.symbol}</p>
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    <p className="font-bold">${asset.value.toFixed(2)}</p>
-                    <p className={`text-sm ${asset.change >= 0 ? 'text-green-400' : 'text-red-400'}`}>
-                      {asset.change >= 0 ? '+' : ''}{asset.change}%
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* NFTs */}
-        {activeTab === 'nfts' && (
-          <div>
-            <h3 className="text-xl font-bold mb-4">NFTs</h3>
-            <div className="grid grid-cols-2 gap-4">
-              {nfts.map((nft, index) => (
-                <div key={index} className="bg-neutral-950 p-4 rounded-lg">
-                  <div className="bg-neutral-800 h-40 rounded-lg mb-2"></div>
-                  <p className="font-bold">{nft.name}</p>
-                  <p className="text-sm text-neutral-700">{nft.collection}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Activity */}
-        {activeTab === 'activity' && (
-          <div>
-            <h3 className="text-xl font-bold mb-4">Recent Activity</h3>
-            <div className="bg-neutral-950 rounded-lg p-4">
-              <p className="text-center text-neutral-300">No recent activity</p>
-            </div>
-          </div>
-        )}
-      </main>
-    </div>
-  );
+const projectId = process.env.NEXT_PUBLIC_PROJECT_ID;
+if (!projectId) {
+  throw new Error("You need to provide NEXT_PUBLIC_PROJECT_ID env variable");
 }
 
+const web3Modal = new Web3Modal({
+  projectId,
+  walletConnectVersion: 2,
+});
+
+const Home: NextPage = () => {
+  const [client, setClient] = useState<AuthClient | null>(null);
+  const [hasInitialized, setHasInitialized] = useState(false);
+  const [uri, setUri] = useState<string>("");
+  const [address, setAddress] = useState<string>("");
+  const [view, setView] = useState<"default" | "qr" | "signedIn">("default");
+  const toast = useToast();
+
+  const onSignIn = useCallback(() => {
+    if (!client) return;
+    client
+      .request({
+        aud: window.location.href,
+        domain: window.location.hostname.split(".").slice(-2).join("."),
+        chainId: "eip155:1",
+        type: "eip4361",
+        nonce: generateNonce(),
+        statement: "Sign in with wallet.",
+      })
+      .then(({ uri }) => {
+        if (uri) {
+          setUri(uri);
+        }
+      });
+  }, [client]);
+
+  useEffect(() => {
+    AuthClient.init({
+      relayUrl: process.env.NEXT_PUBLIC_RELAY_URL || "wss://relay.walletconnect.com",
+      projectId: process.env.NEXT_PUBLIC_PROJECT_ID!,
+      metadata: {
+        name: "",
+        description: "",
+        url: window.location.host,
+        icons: [],
+      },
+    })
+      .then((authClient) => {
+        setClient(authClient);
+        setHasInitialized(true);
+      })
+      .catch(console.error);
+  }, []);
+
+  useEffect(() => {
+    if (!client) return;
+    client.on("auth_response", ({ params }) => {
+      if ("code" in params) {
+        console.error(params);
+        return web3Modal.closeModal();
+      }
+      if ("error" in params) {
+        console.error(params.error);
+        if ("message" in params.error) {
+          toast({
+            status: "error",
+            title: params.error.message,
+          });
+        }
+        return web3Modal.closeModal();
+      }
+      toast({
+        status: "success",
+        title: "Auth request successfully approved",
+        colorScheme: "whatsapp",
+      });
+      setAddress(params.result.p.iss.split(":")[4]);
+    });
+  }, [client, toast]);
+
+  useEffect(() => {
+    async function handleOpenModal() {
+      if (uri) {
+        await web3Modal.openModal({
+          uri,
+          standaloneChains: ["eip155:1"],
+        });
+      }
+    }
+    handleOpenModal();
+  }, [uri]);
+
+  useEffect(() => {
+    if (address) {
+      web3Modal.closeModal();
+      setView("signedIn");
+    }
+  }, [address]);
+
+  return (
+    <ChakraProvider>
+      <Box width="100vw" height="100vh" className="bg-primary">
+        <Grid
+          templateAreas={`"header" "main" "footer"`}
+          style={{ height: "100%", width: "100%" }}
+          gridTemplateRows={"50px 3fr 20px"}
+          gridTemplateColumns={"1fr"}
+          paddingY="2em"
+        >
+          <GridItem area={"header"}>
+            <Flex alignItems="center" justifyContent="center" gap="5" fontSize={"1.25em"}>
+              <div>Neon Purse</div>
+              <Flex padding="0.5em" borderRadius="16px" className="bg-secondary" gap="2">
+                <Image width="1.5em" height="1.5em" src="/wc-bg.png" alt="WC" />
+                <span>V{version}</span>
+              </Flex>
+            </Flex>
+          </GridItem>
+          <Flex justifyContent="center">
+            <GridItem area={"main"} justifyContent="center">
+              <Box width="100%" height="100%">
+                {view === "default" && (
+                  <DefaultView onClick={onSignIn} hasInitialized={hasInitialized} />
+                )}
+                {view === "signedIn" && <SignedInView address={address} />}
+              </Box>
+            </GridItem>
+          </Flex>
+          <GridItem area={"footer"} alignSelf="flex-end">
+            <Flex justifyContent="flex-end">
+                          </Flex>
+          </GridItem>
+        </Grid>
+      </Box>
+    </ChakraProvider>
+  );
+};
+
+export default Home;
